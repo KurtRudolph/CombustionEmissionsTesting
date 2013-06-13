@@ -7,7 +7,6 @@ class Message
        :sen2,
        :flow,
        :pcb_temp,
-       :date,
        :time,
        :status,
        :battery
@@ -24,7 +23,7 @@ class Message
     @pcb_temp = b[11]
     @time = Time.new ('20' + b[12].to_s).to_i, b[13], b[14], b[15], b[16], b[17]
     @status = b[18]
-    @battery = b[19..20]
+    @battery = "#{b[19]}.#{b[20]}".to_f
   end
 end
   
