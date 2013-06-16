@@ -2,6 +2,10 @@ require 'serialport'
 
 module MicroAeth
 
+  ###
+  # Creates and parses messages to and from the MicroAeth.
+  # See MicroAeth::Com for specifications on the
+  # transmiting of messages.
   class Message
     attr :original_char_string,
          :ref,
@@ -12,9 +16,10 @@ module MicroAeth
          :time,
          :status,
          :battery
-  ##
-  # @param data [String] conents between the STX "\x02"
-  #   and the ETX "0x03"
+
+    ##
+    # @param data [String] conents between the `STX` "\x02"
+    #   and the `ETX` "0x03"
     def initialize data
       raise "invalid data" unless validate_data data
       @original_char_string = data
@@ -32,14 +37,22 @@ module MicroAeth
         @sen2 = d[6..8].unpack("v")[0]
         @flow = d[9..10].unpack("v")[0]
         @pcb_temp = b[11]
-        @time = Time.new ('20' + b[12].to_s).to_i, b[13], b[14], b[15], b[16], b[17]
+        @time = Time.new ('20' + b[12].to_s).to_i,
+                         b[13],
+                         b[14],
+                         b[15],
+                         b[16],
+                         b[17]
         @status = b[18]
         @battery = d[19..20].unpack("v")[0]
       end
   end
-    
 
 
+  ##
+  # Initializes a link between the the system and the device.
+  # used to transmit and recieive MicroAeth::Message
+  # 
   class Com
     attr_accessor :com
 
@@ -66,6 +79,49 @@ module MicroAeth
 end
 
 =begin
+You'll need to assemble a properly formed message, or it won't respond.   
+## Properly forming a messages as suggested by Karl Walter
+
+Communication protocol is based on folowing syntax: 
+`STX LEN DATA CRC ETX`  where:
+
+* `STX` is one byte 0x02 (HEX values)
+* `LEN` is one byte lenght of `DATA` 
+* `CRC` is XOR function between `LEN` byte and `DATA` bytes
+* `ETX` is one byte 0x03
+
+Every string of `DATA` that microAethCOM PC 
+software sends starts with `AE5X:` followed by one letter. 
+
+So you need to write some code to take the data you 
+want to send it, add the `STX` (`0x02`), calculate the 
+`LEN` and add it, Calculate the `CRC`, add that, then finally 
+add the `ETX` (`0x03`).
+
+The `CRC` is always the hardest to get to work.  
+`CRC` is XOR function between `LEN` byte and `DATA` bytes.  
+http://en.wikipedia.org/wiki/Bitwise_operation#XOR 
+You'll probably have to make a best guess as how to `XOR` the `DATA` and `LEN`,
+then try it on the messages that the MicroAeth sends, and see if you get the
+`CRC` that it produced.  
+
+The `LEN` in the messages  from it seemed like they where one longer than the
+number of data bytes, so you'll have to experiment with that.
+
+Also the `LEN` is only 1 byte, and the `DATA` can be any number, so I think you
+are  suppose to XOR the `LEN` with the first `DATA` byte, then take that and
+XOR with the second, and so on, sort of like Xmodem.  I'm not sure which is the
+first `DATA` byte, though.
+
+This may help: http://crcmod.sourceforge.net/crcmod.html
+
+Also just google for `XOR CRC`, finds some good stuff like
+[this](http://stackoverflow.com/questions/344961/how-do-you-compute-the-xor-remainder-used-in-crc)
+
+You should also make sure that when you send /x02 that it sends 00000010 not
+
+01011100 01111000 00110000 00110010.
+
   # from http://aethlabs.com/sites/all/content/microaeth/microAeth%20Model%20AE51%20Operating%20Manual.pdf
   - Data(index)
   - Data(index+1)
