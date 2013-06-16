@@ -28,7 +28,9 @@ module MicroAeth
 
     private
       def validate_data d
-        d != nil
+        if d == nil
+      
+        end
       end
       def read_data d
         b = d.bytes
@@ -46,6 +48,7 @@ module MicroAeth
         @status = b[18]
         @battery = d[19..20].unpack("v")[0]
       end
+
   end
 
 
@@ -56,6 +59,8 @@ module MicroAeth
   class Com
     attr_accessor :com
 
+
+
     def initialize
       port     = '/dev/ttyUSB1'
       baud     = 500_000
@@ -65,8 +70,22 @@ module MicroAeth
       @com     = SerialPort.new port, baud, bytesize, stopbits, parity
     end
 
+    ##
+    # @return A ruby thread which continually reads
+    #   from the MicroAeth::Com#com instance
+    def read_com
+      Thread.new do
+        while true
+          catch :message do 
+            nil
+          end
+        end
+      end 
+    end
+      
+
     def read_message
-      message = ''
+
       while @com.readchar != "\x02"
         nil
       end
@@ -99,7 +118,7 @@ want to send it, add the `STX` (`0x02`), calculate the
 add the `ETX` (`0x03`).
 
 The `CRC` is always the hardest to get to work.  
-`CRC` is XOR function between `LEN` byte and `DATA` bytes.  
+`CRC` is `XOR` function between `LEN` byte and `DATA` bytes.  
 http://en.wikipedia.org/wiki/Bitwise_operation#XOR 
 You'll probably have to make a best guess as how to `XOR` the `DATA` and `LEN`,
 then try it on the messages that the MicroAeth sends, and see if you get the
@@ -109,7 +128,7 @@ The `LEN` in the messages  from it seemed like they where one longer than the
 number of data bytes, so you'll have to experiment with that.
 
 Also the `LEN` is only 1 byte, and the `DATA` can be any number, so I think you
-are  suppose to XOR the `LEN` with the first `DATA` byte, then take that and
+are  suppose to `XOR` the `LEN` with the first `DATA` byte, then take that and
 XOR with the second, and so on, sort of like Xmodem.  I'm not sure which is the
 first `DATA` byte, though.
 
