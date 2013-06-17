@@ -57,8 +57,7 @@ module MicroAeth
   # used to transmit and recieive MicroAeth::Message
   # 
   class Com
-    attr_accessor :com
-
+    attr_accessor :com, :messages
 
 
     def initialize
@@ -68,21 +67,45 @@ module MicroAeth
       stopbits = 1
       parity   = SerialPort::MARK
       @com     = SerialPort.new port, baud, bytesize, stopbits, parity
+      @messages = []
     end
 
     ##
     # @return A ruby thread which continually reads
     #   from the MicroAeth::Com#com instance
     def read_com
-      Thread.new do
-        while true
-          catch :message do 
-            nil
+      @com_thread = Thread.new do
+        com = MicroAeth::Com.new.com
+        begin
+          while true
+            while @com.readchar != "\x02"; nil; end
+            message = ''
+            while (c = @com.readchar) != "\x03"
+              message = message + c
+            end
+            @messages.push Message.new message
           end
-        end
-      end 
+        rescue EOFError
+          sleep 1
+          retry
+        end 
+      end
     end
-      
+       
+  
+#EOFError: end of file reached
+#from (pry):13:in `readbyte`
+#def something
+  #com = MicroAeth::Com.new.com
+  #begin
+    #while 1
+      #puts com.readbyte
+    #end
+  #rescue EOFError
+    #sleep 1
+    #retry
+  #end
+#end
 
     def read_message
 
