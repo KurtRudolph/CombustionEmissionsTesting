@@ -28,9 +28,7 @@ module MicroAeth
 
     private
       def validate_data d
-        if d == nil
-      
-        end
+        true
       end
       def read_data d
         b = d.bytes
