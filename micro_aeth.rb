@@ -23,7 +23,7 @@ module MicroAeth
     def initialize data
       raise "invalid data" unless validate_data data
       @original_char_string = data
-      read_data( data[7..-1])
+      #read_data( data[7..-1])
     end
 
     private
