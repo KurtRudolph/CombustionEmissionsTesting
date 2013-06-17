@@ -58,6 +58,7 @@ module MicroAeth
   # 
   class Com
     attr_accessor :com, :messages
+    attr_reader :com_thread
 
 
     def initialize
