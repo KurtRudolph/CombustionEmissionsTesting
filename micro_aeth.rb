@@ -22,7 +22,8 @@ module MicroAeth
     #   and the `ETX` "0x03"
     def initialize data
       raise "invalid data" unless validate_data data
-      @original_char_string = data
+      data
+      #@original_char_string = data
       #read_data( data[7..-1])
     end
 
@@ -82,7 +83,7 @@ module MicroAeth
             while (c = @com.readchar) != "\x03"
               message = message + c
             end
-            @messages.push Message.new message
+            @messages.push message
           end
         rescue EOFError
           sleep 1
