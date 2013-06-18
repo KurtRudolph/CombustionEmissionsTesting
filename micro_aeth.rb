@@ -120,7 +120,7 @@ module MicroAeth
 #end
 
     def read_message
-      message = nil
+      message = ''
       while @com.readchar != "\x02"
         nil
       end
