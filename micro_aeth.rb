@@ -5,9 +5,27 @@ module MicroAeth
     ###
     # @return the first charater in the string as an integer
     def byte
-      string[0].bytes[0]
+      self.bytes[0]
+    end
+
+    ### 
+    # XOR two strings
+    # @str assumed to be a one byte string or integer
+    def ^ str
+      if str.class == String
+        str = str.byte
+      elsif str.class == Fixnum
+        nil
+      else
+        raise "invalid arg: #{str.class} \n Must be String or Fixnum"
+      end
+      self.bytes.each do |i|
+        str = str ^ i
+      end
+      str
     end
   end
+
   ###
   # Creates and parses messages to and from the MicroAeth.
   # See MicroAeth::Com for specifications on the
@@ -23,11 +41,10 @@ module MicroAeth
          :status,
          :battery
 
-    ##
+    ###
     # @param data [String] conents between the `STX` "\x02"
     #   and the `ETX` "0x03"
     def initialize data
-      binding.pry
       raise "invalid data" unless data_valid? data
       #data
       #@original_char_string = data
@@ -36,19 +53,10 @@ module MicroAeth
 
     private
       def data_valid? d
-        crc = d[-1].bytes[0]
-        data = d[1..-2].bytes
-        len = d[0].bytes[0]
-        (xor data, len) == crc
-      end
-      # The xor of two byte strings 
-      # @arg str_arg a one byte string
-      # @self data string
-      def xor str0, str1
-        str0.each do |i|
-          str1 = str1 ^ i
-        end
-        str1
+        crc = d[-1].byte
+        data = d[1..-2]
+        len = d[0].byte
+        (data ^ len) == crc
       end
       def read_data d
         b = d.bytes
@@ -115,19 +123,7 @@ module MicroAeth
         end 
       end
     end
-       
-#from (pry):13:in `readbyte`
-#def something
-  #com = MicroAeth::Com.new.com
-  #begin
-    #while 1
-      #puts com.readbyte
-    #end
-  #rescue EOFError
-    #sleep 1
-    #retry
-  #end
-#end
+
     private
     def read_message
       m, c = '',''
