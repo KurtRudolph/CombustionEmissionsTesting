@@ -1,6 +1,13 @@
 require 'serialport'
 
 module MicroAeth
+  class ::String
+    ###
+    # @return the first charater in the string as an integer
+    def byte
+      string[0].bytes[0]
+    end
+  end
   ###
   # Creates and parses messages to and from the MicroAeth.
   # See MicroAeth::Com for specifications on the
@@ -29,12 +36,6 @@ module MicroAeth
 
     private
       def data_valid? d
-        crc = d[-1].bytes[0]
-        data = d[1..-2].bytes
-        len = d[0].bytes[0]
-        (xor data, len) == crc
-      end
-      def data_valid? len, data
         crc = d[-1].bytes[0]
         data = d[1..-2].bytes
         len = d[0].bytes[0]
@@ -100,13 +101,14 @@ module MicroAeth
             while c != "\x02"; c = @com.readchar; end
             c = @com.readchar
             m << c
-            len = c.bytes[0]
+            len = c.byte
             1.upto len do |i|
               c = @com.readchar
               m << c
             end
             @messages << m
           end
+        # @error EOFError: end of file reached
         rescue EOFError
           sleep 1
           retry
@@ -114,8 +116,6 @@ module MicroAeth
       end
     end
        
-  
-#EOFError: end of file reached
 #from (pry):13:in `readbyte`
 #def something
   #com = MicroAeth::Com.new.com
@@ -128,13 +128,13 @@ module MicroAeth
     #retry
   #end
 #end
-
+    private
     def read_message
       m, c = '',''
       while c != "\x02"; c = @com.readchar; end
       c = @com.readchar
       m << c
-      len = c.bytes[0]
+      len = c.byte
       1.upto len do |i|
         c = @com.readchar
         m << c
