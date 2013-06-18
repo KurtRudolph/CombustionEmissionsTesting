@@ -21,16 +21,22 @@ module MicroAeth
     #   and the `ETX` "0x03"
     def initialize data
       binding.pry
-      raise "invalid data" unless validate_data data
-      data
-      @original_char_string = data
-      read_data( data[7..-1])
+      raise "invalid data" unless data_valid? data
+      #data
+      #@original_char_string = data
+      #read_data( data[7..-1])
     end
 
     private
-      def data_validate? d
+      def data_valid? d
         crc = d[-1].bytes[0]
-        data = d[1...-1].bytes
+        data = d[1..-2].bytes
+        len = d[0].bytes[0]
+        (xor data, len) == crc
+      end
+      def data_valid? len, data
+        crc = d[-1].bytes[0]
+        data = d[1..-2].bytes
         len = d[0].bytes[0]
         (xor data, len) == crc
       end
@@ -90,12 +96,16 @@ module MicroAeth
         com = MicroAeth::Com.new.com
         begin
           while true
-            while @com.readchar != "\x02"; nil; end
-            message = ''
-            while (c = @com.readchar) != "\x03"
-              message = message + c
+            m = ''
+            while c != "\x02"; c = @com.readchar; end
+            c = @com.readchar
+            m << c
+            len = c.bytes[0]
+            1.upto len do |i|
+              c = @com.readchar
+              m << c
             end
-            @messages.push message
+            @messages << m
           end
         rescue EOFError
           sleep 1
@@ -120,7 +130,7 @@ module MicroAeth
 #end
 
     def read_message
-      message = ''
+      message = nil
       while @com.readchar != "\x02"
         nil
       end
