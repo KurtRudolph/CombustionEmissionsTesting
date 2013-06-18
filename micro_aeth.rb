@@ -130,7 +130,7 @@ module MicroAeth
 #end
 
     def read_message
-      m = ''
+      m, c = '',''
       while c != "\x02"; c = @com.readchar; end
       c = @com.readchar
       m << c
