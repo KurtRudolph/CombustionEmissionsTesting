@@ -1,7 +1,6 @@
 require 'serialport'
 
 module MicroAeth
-
   ###
   # Creates and parses messages to and from the MicroAeth.
   # See MicroAeth::Com for specifications on the
@@ -21,15 +20,28 @@ module MicroAeth
     # @param data [String] conents between the `STX` "\x02"
     #   and the `ETX` "0x03"
     def initialize data
+      binding.pry
       raise "invalid data" unless validate_data data
       data
-      #@original_char_string = data
-      #read_data( data[7..-1])
+      @original_char_string = data
+      read_data( data[7..-1])
     end
 
     private
-      def validate_data d
-        true
+      def data_validate? d
+        crc = d[-1].bytes[0]
+        data = d[1...-1].bytes
+        len = d[0].bytes[0]
+        (xor data, len) == crc
+      end
+      # The xor of two byte strings 
+      # @arg str_arg a one byte string
+      # @self data string
+      def xor str0, str1
+        str0.each do |i|
+          str1 = str1 ^ i
+        end
+        str1
       end
       def read_data d
         b = d.bytes
@@ -108,7 +120,7 @@ module MicroAeth
 #end
 
     def read_message
-
+      message = nil
       while @com.readchar != "\x02"
         nil
       end
@@ -129,7 +141,8 @@ Communication protocol is based on folowing syntax:
 
 * `STX` is one byte 0x02 (HEX values)
 * `LEN` is one byte lenght of `DATA` 
-* `CRC` is XOR function between `LEN` byte and `DATA` bytes
+* `CRC` is XOR function between `LEN` byte and `DATA` bytes 
+  * I'm assuming this is the last byte of data
 * `ETX` is one byte 0x03
 
 Every string of `DATA` that microAethCOM PC 
