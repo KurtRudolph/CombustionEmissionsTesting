@@ -79,7 +79,7 @@ module MicroAeth
 
 
     def initialize
-      port     = '/dev/ttyUSB0'
+      port     = '/dev/ttyUSB1'
       baud     = 500_000
       bytesize = 8
       stopbits = 1
