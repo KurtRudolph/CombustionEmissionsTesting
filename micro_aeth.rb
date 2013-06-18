@@ -130,14 +130,16 @@ module MicroAeth
 #end
 
     def read_message
-      message = nil
-      while @com.readchar != "\x02"
-        nil
+      m = ''
+      while c != "\x02"; c = @com.readchar; end
+      c = @com.readchar
+      m << c
+      len = c.bytes[0]
+      1.upto len do |i|
+        c = @com.readchar
+        m << c
       end
-      while (c = @com.readchar) != "\x03"
-        message = message + c
-      end
-      Message.new message
+      m
     end
   end
 end
