@@ -30,6 +30,27 @@ describe MicroAeth do
     it "initialized a Com" do
       com = Com.new
     end
+    it "turns the MicroAeth off" do
+      com = Com.new
+      t = Time.now
+      com.write_message "\x02" + 
+                        21.chr + 
+                        "AE5X:O" + 
+                        1.chr +  # Power OFF enabled
+                        (t.year - 2000).chr +
+                        t.month.chr +
+                        t.day.chr +
+                        t.hour.chr +
+                        t.min.chr +
+                        t.sec.chr +
+                        0.chr + # Power ON enabled
+                        (t.year - 2000).chr +
+                        t.month.chr +
+                        t.day.chr +
+                        t.hour.chr +
+                        t.min.chr +
+                        t.sec.chr
+    end
   end
 end
 

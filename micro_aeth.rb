@@ -98,12 +98,12 @@ module MicroAeth
       @messages = []
     end
 
+
     ##
     # @return A ruby thread which continually reads
     #   from the MicroAeth::Com#com instance
     def read_com
       @com_thread = Thread.new do
-        com = MicroAeth::Com.new.com
         begin
           while true
             m, c = '', ''
@@ -125,7 +125,6 @@ module MicroAeth
       end
     end
 
-    private
     def read_message
       m, c = '',''
       while c != "\x02"; c = @com.readchar; end
@@ -137,6 +136,9 @@ module MicroAeth
         m << c
       end
       m
+    end
+    def write_message m
+      @com.write m
     end
   end
 end
