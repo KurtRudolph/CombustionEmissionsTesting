@@ -48,10 +48,11 @@ describe MicroAeth do
           t.hour.chr +
           t.min.chr +
           t.sec.chr
-      binding.pry
       crc = m ^ len
       com = Com.new
-      com.write_message "\x02" + len + m + crc + "\x03"
+      0.upto 100 do 
+        com.write_message ("\x02" + len + m + crc + "\x03").force_encoding( "ASCII-8BIT")
+      end
     end
   end
 end
