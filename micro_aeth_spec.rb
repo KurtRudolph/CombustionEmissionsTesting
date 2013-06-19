@@ -31,7 +31,6 @@ describe MicroAeth do
       com = Com.new
     end
     it "turns the MicroAeth off" do
-      com = Com.new
       t = Time.now
       len = 21.chr 
       m = "AE5X:O" + 
@@ -48,8 +47,10 @@ describe MicroAeth do
           t.day.chr +
           t.hour.chr +
           t.min.chr +
-          t.sec.chr +
+          t.sec.chr
+      binding.pry
       crc = m ^ len
+      com = Com.new
       com.write_message "\x02" + len + m + crc + "\x03"
     end
   end
