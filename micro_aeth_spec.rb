@@ -52,7 +52,7 @@ describe MicroAeth do
       com = Com.new
       begin
         while true
-          puts com.read_message
+          puts com.read_message.force_encoding "UTF-8"
         end
       rescue EOFError
         0.upto 100 do 
