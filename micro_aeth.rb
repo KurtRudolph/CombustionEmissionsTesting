@@ -22,7 +22,7 @@ module MicroAeth
       self.bytes.each do |i|
         str = str ^ i
       end
-      (str ^ 2).chr.force_encoding( "ASCII-8BIT")
+      str.chr.force_encoding( "ASCII-8BIT")
     end
   end
 
