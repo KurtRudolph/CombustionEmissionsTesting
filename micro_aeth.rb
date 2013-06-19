@@ -22,7 +22,7 @@ module MicroAeth
       self.bytes.each do |i|
         str = str ^ i
       end
-      str
+      str.chr.force_encoding( "UTF-8")
     end
   end
 
@@ -51,12 +51,13 @@ module MicroAeth
       #read_data( data[7..-1])
     end
 
+
     private
       def data_valid? d
-        crc = d[-1].byte
+        crc = d[-1]
         data = d[1..-2]
-        len = d[0].byte
-        (data ^ len) == crc
+        len = d[0]
+        (data ^ len).byte == crc.byte
       end
       def read_data d
         b = d.bytes

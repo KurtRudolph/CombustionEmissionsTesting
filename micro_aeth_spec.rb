@@ -1,14 +1,35 @@
 require './micro_aeth.rb'
 require 'pry'
 
-describe "Message" do
-  it "validates a string properly" do
-    message_string = "%AE5X:M\x06\x12\x00\xEE\x00~\x17\x00\x00\x00&\r\x06\x12\x19\x14@d\x00\x03\x04\x05\x06\a\b\t\n\v\f\xB1"
-    MicroAeth::Message.new message_string
+include MicroAeth
+
+describe MicroAeth do
+  describe ::String do
+    it "returns the arrording integer represented by the byte passed" do
+      "\x00".byte.should equal 0
+    end
+    it "XORs two strings" do
+      (0.chr ^ 1.chr ).should eq 1.chr
+    end
   end
-  it "validates another string properly" do
-    message_string = "%AE5X:M\xF5\x00\x91\x00e\x17\x00\x00\x00 \r\x06\x12\b\x1F\x03@d\x00\x03\x04\x05\x06\a\b\t\n\v\f+"
-    MicroAeth::Message.new message_string
+  describe Message do 
+    it "initializes a Message with valid data string" do
+      message_string = "%AE5X:M\x06\x12\x00\xEE\x00~\x17\x00\x00\x00&\r\x06\x12\x19\x14@d\x00\x03\x04\x05\x06\a\b\t\n\v\f\xB1"
+      Message.new message_string
+    end
+    it "initializes a Message with valid data string" do
+      message_string = "%AE5X:M\xF5\x00\x91\x00e\x17\x00\x00\x00 \r\x06\x12\b\x1F\x03@d\x00\x03\x04\x05\x06\a\b\t\n\v\f+"
+      Message.new message_string
+    end
+    it "validates a string of data" do
+      m = Message.new "%AE5X:M\xF5\x00\x91\x00e\x17\x00\x00\x00 \r\x06\x12\b\x1F\x03@d\x00\x03\x04\x05\x06\a\b\t\n\v\f+"
+      m.instance_eval{ data_valid? "abcd"}.should equal false
+    end
+  end
+  describe Com do
+    it "initialized a Com" do
+      com = Com.new
+    end
   end
 end
 
