@@ -50,8 +50,15 @@ describe MicroAeth do
           t.sec.chr
       crc = m ^ len
       com = Com.new
-      0.upto 100 do 
-        com.write_message ("\x02" + len + m + crc + "\x03").force_encoding( "ASCII-8BIT")
+      begin
+        while true
+          puts com.read_message
+        end
+      rescue EOFError
+        0.upto 100 do 
+          com.write_message ("\x02" + len + m + crc + "\x03").force_encoding( "ASCII-8BIT")
+        end
+        retry
       end
     end
   end
