@@ -98,7 +98,7 @@ module MicroAeth
     attr_reader :com_thread
 
     def initialize
-      port     = '/dev/ttys002'
+      port     = '/dev/ttyUSB0'
       baud     = 500_000
       bytesize = 8
       stopbits = 1
@@ -149,11 +149,15 @@ module MicroAeth
       c = @com.readchar
       m << c
       len = c.byte
-      1.upto len do |i|
+      0.upto len do |i|
         c = @com.readchar
         m << c
       end
-      m
+      while c != "\x03"
+        c = @com.readchar
+        m << c
+      end
+      m[0..-2]
     end
   end
 end
