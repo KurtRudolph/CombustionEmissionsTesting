@@ -26,6 +26,18 @@ module MicroAeth
     end
   end
 
+  class Instruction
+    ###
+    # Message constants
+    STX = "\x02" # Start of each message
+    ETX = "\x03" # End of each message
+    M = "AE5X:" # What each message starts with
+    EraseFlash = "E" # Reply:ACK, after flash is erased anotherACK issent.(erasing should take 30 – 45 seconds)
+    StopWrite = "S" # stopswriting to flash
+    StartWrite = "W" # Startswriting to flash
+    Kill = "K" # Kill Shuts down microAeth
+  end
+
   ###
   # Creates and parses messages to and from the MicroAeth.
   # See MicroAeth::Com for specifications on the
@@ -84,12 +96,12 @@ module MicroAeth
   # used to transmit and recieive MicroAeth::Message
   # 
   class Com
+
     attr_accessor :com, :messages
     attr_reader :com_thread
 
-
     def initialize
-      port     = '/dev/ttyUSB1'
+      port     = '/dev/ttys002'
       baud     = 500_000
       bytesize = 8
       stopbits = 1
@@ -98,11 +110,16 @@ module MicroAeth
       @messages = []
     end
 
+    ###
+    # @m The message to be written
+    def self.write instruction
+      (Instruction::STX + Instruction::M + instruction + Instruction::ETX).force_encoding("ASCII-8BIT")
+    end 
 
     ##
     # @return A ruby thread which continually reads
     #   from the MicroAeth::Com#com instance
-    def read_com
+    def read
       @com_thread = Thread.new do
         begin
           while true
