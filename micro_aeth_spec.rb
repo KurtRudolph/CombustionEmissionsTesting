@@ -21,46 +21,6 @@ describe MicroAeth do
       message_string = "%AE5X:M\xF5\x00\x91\x00e\x17\x00\x00\x00 \r\x06\x12\b\x1F\x03@d\x00\x03\x04\x05\x06\a\b\t\n\v\f+"
       Message.new message_string
     end
-    it "validates a string of data" do
-      m = Message.new "%AE5X:M\xF5\x00\x91\x00e\x17\x00\x00\x00 \r\x06\x12\b\x1F\x03@d\x00\x03\x04\x05\x06\a\b\t\n\v\f+"
-      m.instance_eval{ data_valid? "abcd"}.should equal false
-    end
-  end
-  describe Com do
-    it "initialized a Com" do
-      com = Com.new
-    end
-    it "turns the MicroAeth off" do
-      t = Time.now
-      len = 21.chr 
-      m = "AE5X:O" + 
-          1.chr +  # Power OFF enabled
-          (t.year - 2000).chr +
-          t.month.chr +
-          t.day.chr +
-          t.hour.chr +
-          t.min.chr +
-          t.sec.chr +
-          0.chr + # Power ON enabled
-          (t.year - 2000).chr +
-          t.month.chr +
-          t.day.chr +
-          t.hour.chr +
-          t.min.chr +
-          t.sec.chr
-      crc = m ^ len
-      com = Com.new
-      begin
-        while true
-          puts com.read_message.force_encoding "UTF-8"
-        end
-      rescue EOFError
-        0.upto 100 do 
-          com.write_message ("\x02" + len + m + crc + "\x03").force_encoding( "ASCII-8BIT")
-        end
-        retry
-      end
-    end
   end
 end
 

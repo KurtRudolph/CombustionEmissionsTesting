@@ -58,11 +58,9 @@ module MicroAeth
     #   and the `ETX` "0x03"
     def initialize data
       raise "invalid data" unless data_valid? data
-      #data
-      #@original_char_string = data
-      #read_data( data[7..-1])
+      @original_char_string = data
+      parse_data( data[7..-1])
     end
-
 
     private
       def data_valid? d
@@ -71,13 +69,14 @@ module MicroAeth
         len = d[0]
         (data ^ len).byte == crc.byte
       end
-      def read_data d
+      def parse_data d
         b = d.bytes
         @ref = d[0..2].unpack("v")[0]
         @sen1 = d[3..5].unpack("v")[0]
         @sen2 = d[6..8].unpack("v")[0]
         @flow = d[9..10].unpack("v")[0]
         @pcb_temp = b[11]
+        binding.pry
         @time = Time.new ('20' + b[12].to_s).to_i,
                          b[13],
                          b[14],
@@ -87,7 +86,6 @@ module MicroAeth
         @status = b[18]
         @battery = d[19..20].unpack("v")[0]
       end
-
   end
 
 
@@ -96,7 +94,6 @@ module MicroAeth
   # used to transmit and recieive MicroAeth::Message
   # 
   class Com
-
     attr_accessor :com, :messages
     attr_reader :com_thread
 
@@ -112,9 +109,9 @@ module MicroAeth
 
     ###
     # @m The message to be written
-    def self.write instruction
-      (Instruction::STX + Instruction::M + instruction + Instruction::ETX).force_encoding("ASCII-8BIT")
-    end 
+    def write instruction
+      @com.write (Instruction::STX + Instruction::M + instruction + Instruction::ETX).force_encoding("ASCII-8BIT")
+    end
 
     ##
     # @return A ruby thread which continually reads
@@ -129,6 +126,10 @@ module MicroAeth
             m << c
             len = c.byte
             1.upto len do |i|
+              c = @com.readchar
+              m << c
+            end
+            while c != "\x03"
               c = @com.readchar
               m << c
             end
@@ -153,9 +154,6 @@ module MicroAeth
         m << c
       end
       m
-    end
-    def write_message m
-      @com.write m
     end
   end
 end
