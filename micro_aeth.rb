@@ -120,22 +120,9 @@ module MicroAeth
       @com_thread = Thread.new do
         begin
           while true
-            m, c = '', ''
-            while c != "\x02"; c = @com.readchar; end
-            c = @com.readchar
-            m << c
-            len = c.byte
-            1.upto len do |i|
-              c = @com.readchar
-              m << c
-            end
-            while c != "\x03"
-              c = @com.readchar
-              m << c
-            end
-            @messages << m
+            @messages << read_message
           end
-        # @error EOFError: end of file reached
+        # Intermitently, it the serialport library raises end of file...
         rescue EOFError
           sleep 1
           retry
