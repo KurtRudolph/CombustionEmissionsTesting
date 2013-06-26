@@ -111,7 +111,7 @@ module MicroAeth
     # @m The message to be written
     def write instruction
       data = Instruction::M + instruction
-      len = data.length
+      len = data.length.chr
       crc = data ^ len
       @com.write (Instruction::STX + len + data + crc + Instruction::ETX).force_encoding("ASCII-8BIT")
     end
