@@ -1,3 +1,5 @@
+require 'serialport'
+
 module DAQ
   class Com
     attr_accessor :com, :messages
