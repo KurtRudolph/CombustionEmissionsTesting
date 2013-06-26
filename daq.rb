@@ -34,3 +34,24 @@ module DAQ
 
   end
 end
+
+=begin
+2.0.0 (main):0 > com.com.write "log\r"
+=> 4
+2.0.0 (main):0 > com.com.readline
+=> "log\r\n"
+2.0.0 (main):0 > com.com.readline
+=> "#logging\r\n"
+2.0.0 (main):0 > com.com.readline
+=> "##,## \r\n"
+2.0.0 (main):0 > com.com.readline
+=> "#0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1\r\n"
+2.0.0 (main):0 > com.com.readline
+=> "seconds,PMred,PMir,Tflow,Qflow,CO,CObkg,Aflow,TC,bat1,bat2,temp1,temp2,CO2,CO2bkg,RH,PMtemp\r\n"
+2.0.0 (main):0 > com.com.readline
+=> "1.00,131071,131071,0,38838,38973,39158,131071,131071,131071,131071,131071,131071,131071,131071,131071,131071\r\n"
+2.0.0 (main):0 > com.com.readline
+=> "4.00,131071,131071,-1,44691,46573,45088,131071,131071,131071,131071,131071,131071,131071,131071,131071,131071\r\n"
+2.0.0 (main):0 > com.com.readline
+=> "7.00,131071,131071,-1,49932,53661,50459,131071,131071,131071,131071,131071,131071,131071,131071,131071,131071\r\n"
+=end
