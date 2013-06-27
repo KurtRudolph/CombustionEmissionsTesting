@@ -98,7 +98,7 @@ module MicroAeth
     attr_reader :com_thread
 
     def initialize
-      port     = '/dev/ttyUSB0'
+      port     = '/dev/serial/by-id/usb-AethLabs_microAeth_Model_AE51_AE51-S4-649-1303-if00-port0'
       baud     = 500_000
       bytesize = 8
       stopbits = 1

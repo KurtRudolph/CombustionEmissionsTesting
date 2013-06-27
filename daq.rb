@@ -1,12 +1,20 @@
 require 'serialport'
 
 module DAQ
+  def start
+    com = Com.new
+    com.com.write "log\r"
+    5.times do
+      com.messages << com.com.readline
+    end
+    
+  end
   class Com
     attr_accessor :com, :messages
     attr_reader :com_thread
 
     def initialize
-      port     = '/dev/ttyUSB1'
+      port     = 'usb-Prolific_Technology_Inc._USB-Serial_Controller_D-if00-port0'
       baud     = 9600
       bytesize = 8
       stopbits = 1
@@ -14,11 +22,17 @@ module DAQ
       @com     = SerialPort.new port, baud, bytesize, stopbits, parity
       @messages = []
     end
+    
 
     ##
+    # Assumes the device is already running
     # @return A ruby thread which continually reads
     #   from the MicroAeth::Com#com instance
-    def read
+    # @collumn_names The names of each of the readings
+    # @cals The calibration constants
+    def read collumn_names, cals
+      @columns = collumn_names.split(',')
+      @collumns[-1] = (@columns[-1])[0..-3] # all but the last two characters
       @com_thread = Thread.new do
         begin
           while true
