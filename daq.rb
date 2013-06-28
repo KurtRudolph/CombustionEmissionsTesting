@@ -32,7 +32,9 @@ module DAQ
       end
       @com.write "log\r"
       3.times { sleep 3; @com.readline }
+      sleep 3
       @cal_consts = @com.readline.split(',')
+      sleep 3
       @cal_consts[-1] = (@cal_consts[-1])[0..-3]
       @column_names = @com.readline.split(',')
       @column_names[-1] = (@column_names[-1])[0..-3]
