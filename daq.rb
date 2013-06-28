@@ -28,10 +28,10 @@ module DAQ
           @com.readchar
         end
       rescue EOFError
-        sleep 1
+        sleep 3
       end
       @com.write "log\r"
-      3.times { sleep 1; @com.readline }
+      3.times { sleep 3; @com.readline }
       @cal_consts = @com.readline.split(',')
       @cal_consts[-1] = (@cal_consts[-1])[0..-3]
       @column_names = @com.readline.split(',')
@@ -54,7 +54,7 @@ module DAQ
             @messages << line
           end
         rescue EOFError
-          sleep 1
+          sleep 3
           retry
         end 
       end
