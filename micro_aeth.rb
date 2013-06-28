@@ -76,7 +76,6 @@ module MicroAeth
         @sen2 = d[6..8].unpack("v")[0]
         @flow = d[9..10].unpack("v")[0]
         @pcb_temp = b[11]
-        binding.pry
         @time = Time.new ('20' + b[12].to_s).to_i,
                          b[13],
                          b[14],
@@ -123,7 +122,7 @@ module MicroAeth
       @com_thread = Thread.new do
         begin
           while true
-            @messages << read_message
+            @messages << Message.new read_message
           end
         # Intermitently, it the serialport library raises end of file...
         rescue EOFError
