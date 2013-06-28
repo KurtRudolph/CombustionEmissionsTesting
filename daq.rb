@@ -10,7 +10,7 @@ module DAQ
     
   end
   class Com
-    attr_accessor :com, :messages
+    attr_accessor :com, :messages, :cal_consts
     attr_reader :com_thread
 
     def initialize
@@ -21,8 +21,14 @@ module DAQ
       parity   = SerialPort::NONE
       @com     = SerialPort.new port, baud, bytesize, stopbits, parity
       @messages = []
+      @com.write "log\r"
+      3.times { @com.readline }
+      @cal_consts = @com.readline.split(',')
+      @cal_consts[-1] = (@cal_consts[-1])[0..-3]
+      @column_names = collumn_names.split(',')
+      @collumn_names[-1] = (@columns[-1])[0..-3]
+      read
     end
-    
 
     ##
     # Assumes the device is already running
@@ -30,15 +36,14 @@ module DAQ
     #   from the MicroAeth::Com#com instance
     # @collumn_names The names of each of the readings
     # @cals The calibration constants
-    def read collumn_names, cals
-      @columns = collumn_names.split(',')
-      @collumns[-1] = (@columns[-1])[0..-3] # all but the last two characters
+    def read
       @com_thread = Thread.new do
         begin
           while true
-            @messages << @com.readline
+            line = @com.readline.split(',')
+            line[-1] = (line[-1])[0..-3]
+            @messages << line
           end
-        # Intermitently, it the serialport library raises end of file...
         rescue EOFError
           sleep 1
           retry
