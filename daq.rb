@@ -26,7 +26,7 @@ module DAQ
     def start
       begin 
         while true
-          @com.com.readchar
+          @com.readchar
         end
       rescue EOFError
         sleep 1
