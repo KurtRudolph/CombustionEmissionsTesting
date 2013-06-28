@@ -21,6 +21,16 @@ module DAQ
       parity   = SerialPort::NONE
       @com     = SerialPort.new port, baud, bytesize, stopbits, parity
       @messages = []
+      start
+    end
+    def start
+      begin 
+        while true
+          @com.com.readchar
+        end
+      rescue EOFError
+        sleep 1
+      end
       @com.write "log\r"
       3.times { @com.readline }
       @cal_consts = @com.readline.split(',')
