@@ -21,7 +21,6 @@ module DAQ
       parity   = SerialPort::NONE
       @com     = SerialPort.new port, baud, bytesize, stopbits, parity
       @messages = []
-      start
     end
     def start
       begin 
