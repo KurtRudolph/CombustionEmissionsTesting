@@ -10,7 +10,7 @@ module DAQ
     
   end
   class Com
-    attr_accessor :com, :messages, :cal_consts
+    attr_accessor :com, :messages, :cal_consts, :column_names
     attr_reader :com_thread
 
     def initialize
@@ -25,8 +25,8 @@ module DAQ
       3.times { @com.readline }
       @cal_consts = @com.readline.split(',')
       @cal_consts[-1] = (@cal_consts[-1])[0..-3]
-      @column_names = collumn_names.split(',')
-      @collumn_names[-1] = (@columns[-1])[0..-3]
+      @column_names = @com.readline.split(',')
+      @column_names[-1] = (@column_names[-1])[0..-3]
       read
     end
 
