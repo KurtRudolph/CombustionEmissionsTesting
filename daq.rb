@@ -38,7 +38,7 @@ module DAQ
       @cal_consts[-1] = (@cal_consts[-1])[0..-3]
       @column_names = @com.readline.split(',')
       @column_names[-1] = (@column_names[-1])[0..-3]
-      read
+      self
     end
 
     ##
