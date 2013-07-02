@@ -18,6 +18,7 @@ module DAQ
       baud     = 9600
       bytesize = 8
       stopbits = 1
+      timeout  = 5
       parity   = SerialPort::NONE
       @com     = SerialPort.new port, baud, bytesize, stopbits, parity
       @messages = []
