@@ -14,7 +14,7 @@ module DAQ
     attr_reader :com_thread
 
     def initialize
-      port     = '/dev/serial/by-id/usb-Prolific_Technology_Inc._USB-Serial_Controller_D-if00-port0'
+      port     = '/dev/ttyAMA0'
       baud     = 9600
       bytesize = 8
       stopbits = 1
