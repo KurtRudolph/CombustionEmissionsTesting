@@ -122,7 +122,7 @@ module MicroAeth
       @com_thread = Thread.new do
         begin
           while true
-            @messages << Message.new read_message
+            @messages << ( Message.new read_message )
           end
         # Intermitently, it the serialport library raises end of file...
         rescue EOFError
