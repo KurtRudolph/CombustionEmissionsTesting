@@ -37,9 +37,7 @@ class DAQ
     @cal_consts = @cal_consts.map { |const| const.to_f }
     sleep 3
     @column_names = @com.readline[0..-3].split(',')
-    if i = @column_names.find_index('seconds')
-      @cal_consts[i] = 1.0
-    end
+    i=0; @cal_consts[i] = 1.0 if i = @column_names.find_index('seconds')
     self
   end
 
@@ -74,7 +72,7 @@ class DAQ
     @stop_writing_to_file = false
     @thread = Thread.new do
       while @stop_writing_to_file != true
-        file << (read_message.join(',') + "\n")
+        file << read_message.join(',') + "\n"
       end
       file.close
     end
