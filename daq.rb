@@ -41,11 +41,10 @@ module DAQ
       @com.write "log\r"
       3.times { sleep 3; @com.readline }
       sleep 3
-      @cal_consts = @com.readline.split(',')
+      @cal_consts = @com.readline[1..-3].split(',')
+      @cal_consts = @cal_consts.map { |const| const.to_f }
       sleep 3
-      @cal_consts[-1] = (@cal_consts[-1])[0..-3]
-      @column_names = @com.readline.split(',')
-      @column_names[-1] = (@column_names[-1])[0..-3]
+      @column_names = @com.readline[0..-3].split(',')
       self
     end
 
@@ -59,8 +58,7 @@ module DAQ
       @com_thread = Thread.new do
         begin
           while true
-            line = @com.readline.split(',')
-            line[-1] = (line[-1])[0..-3]
+            line = @com.readline[0..-3].split(',')
             @messages << line
           end
         rescue EOFError
