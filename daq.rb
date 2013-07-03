@@ -70,18 +70,18 @@ class DAQ
   end
   ###
   # @file a ruby file object
-  def write_to_file file
-    @stop_writing_to_file == false
+  def start_write_to_file file
+    @stop_writing_to_file = false
     @thread = Thread.new do
-      begin
-        while @stop_writing_to_file != true
-          file << (read_message.join(',') + "\n")
-        end
-      rescue EOFError
-        sleep 3
-        retry
-      end 
+      while @stop_writing_to_file != true
+        file << (read_message.join(',') + "\n")
+      end
+      file.close
     end
+  end
+  def stop_write_to_file
+    @stop_writing_to_file = true
+    @thread.join 30
   end
 end
 
