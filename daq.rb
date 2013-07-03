@@ -18,7 +18,7 @@ module DAQ
       baud     = 9600
       bytesize = 8
       stopbits = 1
-      timeout  = 5
+      timeout  = 5000
       parity   = SerialPort::NONE
       @com     = SerialPort.new port, baud, bytesize, stopbits, parity
       @messages = []
@@ -29,7 +29,7 @@ module DAQ
           @com.readchar
         end
       rescue EOFError
-        sleep 3
+        nil
       end
       @com.write "log\r"
       3.times { sleep 3; @com.readline }
