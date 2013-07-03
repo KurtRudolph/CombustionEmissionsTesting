@@ -2,14 +2,6 @@ require 'serialport'
 require 'timeout'
 
 module DAQ
-  def start
-    com = Com.new
-    com.com.write "log\r"
-    5.times do
-      com.messages << com.com.readline
-    end
-    
-  end
   class Com
     attr_accessor :com, :messages, :cal_consts, :column_names
     attr_reader :com_thread
@@ -24,6 +16,7 @@ module DAQ
       @com     = SerialPort.new port, baud, bytesize, stopbits, parity
       @messages = []
     end
+
     def start
       begin 
         begin 
@@ -67,7 +60,9 @@ module DAQ
         end 
       end
     end
-
+    def read_message
+      @com.readline[0..-3].split(',').map {|i| i.to_f}
+    end
   end
 end
 
