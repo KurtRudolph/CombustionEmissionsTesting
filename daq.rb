@@ -1,4 +1,5 @@
 require 'serialport'
+require 'timeout'
 
 module DAQ
   def start
