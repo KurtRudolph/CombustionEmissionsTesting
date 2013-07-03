@@ -25,9 +25,15 @@ module DAQ
     end
     def start
       begin 
-        while true
-          @com.readchar
-        end
+        begin 
+          Timeout::timeout 60 do #second before it cuts out
+            while true
+              @com.readchar
+            end
+          end
+        rescue Timeout::Error
+          raise 'DAQ already running'
+        end 
       rescue EOFError
         nil
       end
