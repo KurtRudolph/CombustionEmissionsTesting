@@ -1,6 +1,14 @@
 require 'serialport'
 
 module MicroAeth
+  def sigma_ap m, m_prev
+    if m_prev.nil? 
+      "NaN" 
+    else 
+      Math::PI * (0.3 ** 2) / 4.0 / m.flow * 60.0 * 
+        Math.log( m_prev.sen1 / m.sen1 * m.ref / m_prev.ref) * (10.0 ** 8)
+    end
+  end
   class ::String
     ###
     # @return the first charater in the string as an integer
@@ -130,6 +138,26 @@ module MicroAeth
           retry
         end 
       end
+    end
+    
+    ###
+    # @file a ruby file object
+    def start_write_to_file file
+      @stop_writing_to_file = false
+      @thread = Thread.new do
+        m_prev = nil
+        while @stop_writing_to_file != true
+          m = Message.new read_message
+          atn = Math.log( m.ref / m.sen1) * 100
+          file << [m.ref, m.sen1, atn, m.flow, m.pcb_temp, m.status, m.battery, sigma_ap( m, m_prev)].join(',') + "\n"
+          m_prev = m
+        end
+        file.close
+      end
+    end
+    def stop_write_to_file
+      @stop_writing_to_file = true
+      @thread.join 30
     end
 
     def read_message

@@ -22,6 +22,20 @@ describe MicroAeth do
       Message.new message_string
     end
   end
+  describe Com do
+    it "calculates a sigma_ap properly" do
+      class TestMessage; attr_accessor :sen1, :flow, :ref; end
+      m = TestMessage.new; m.ref = 870015.0; m.sen1 = 882687.0; m.flow = 49.0
+      m_prev = TestMessage.new; m_prev.ref = 870007.0; m_prev.sen1 = 882680.0; m_prev.flow = 48.0
+      sigma_ap( m, m_prev).should be_close( 10.948_430_970_2, 0.000_000_000_1)
+    end
+    it "calculates a sigma_ap properly" do
+      class TestMessage; attr_accessor :sen1, :flow, :ref; end
+      m = TestMessage.new; m.ref = 870015.0; m.sen1 = 882687.0; m.flow = 49.0
+      m_prev = nil
+      sigma_ap( m, m_prev).should eq( "NaN")
+    end
+  end
 end
 
 =begin

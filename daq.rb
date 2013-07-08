@@ -43,8 +43,6 @@ class DAQ
 
   ##
   # Assumes the device is already running
-  # @return A ruby thread which continually reads
-  #   from the MicroAeth::Com#com instance
   # @collumn_names The names of each of the readings
   # @cals The calibration constants
   def read
