@@ -144,7 +144,7 @@ module MicroAeth
           rescue RuntimeError
             retry
           end
-          atn = Math.log( m.ref / m.sen1) * 100
+          atn = Math.log( m.ref.to_f / m.sen1.to_f) * 100
           file << [m.ref, m.sen1, atn, m.flow, m.pcb_temp, m.status, m.battery, sigma_ap( m, m_prev)].join(',') + "\n"
           m_prev = m
         end
@@ -160,8 +160,8 @@ module MicroAeth
       if m_prev.nil? 
         "NaN" 
       else 
-        Math::PI * (0.3 ** 2) / 4.0 / m.flow * 60.0 * 
-          Math.log( m_prev.sen1 / m.sen1 * m.ref / m_prev.ref) * (10.0 ** 8)
+        Math::PI * (0.3 ** 2) / 4.0 / m.flow.to_f * 60.0 * 
+          Math.log( m_prev.sen1.to_f / m.sen1.to_f * m.ref.to_f / m_prev.ref.to_f) * (10.0 ** 8)
       end
     end
     def read_message
