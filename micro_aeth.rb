@@ -118,9 +118,9 @@ module MicroAeth
     def erase_flash
       begin 
         write MicroAeth::Instruction::EraseFlash
-        Timeout::timeout 60 { wait_for_acknowledge }
+        Timeout::timeout(60) { wait_for_acknowledge }
         sleep 45
-        Timeout::timeout 60 { wait_for_acknowledge }
+        Timeout::timeout(60) { wait_for_acknowledge }
         write MicroAeth::Instruction::StartWrite
       rescue Timeout::Error
         retry
