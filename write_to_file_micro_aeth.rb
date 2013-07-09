@@ -4,7 +4,7 @@ com = MicroAeth::Com.new
 com.start
 
 f = File.new ('tmp/' + Time.now.to_s + '.micro_aeth.dat'), 'w'
-f << %w(Ref Sen ATN Flow Temp Status Battery sigma_ap).join(',') + "\n"
+f << %w(Timedate Ref Sen ATN Flow Temp Status Battery sigma_ap).join(',') + "\n"
 com.start_write_to_file f
 
 require 'pry'
