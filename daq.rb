@@ -10,9 +10,9 @@ class DAQ
     baud     = 9600
     bytesize = 8
     stopbits = 1
-    timeout  = 5000
     parity   = SerialPort::NONE
-    @com     = SerialPort.new port, baud, bytesize, stopbits, parity
+    @com     = SerialPort.new port, baud, bytesize, stopbits, parity, timeout
+    @com.read_timeout = 5000
     @messages = []
   end
 
