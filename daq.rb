@@ -66,13 +66,14 @@ class DAQ
   end
   ###
   # @file a ruby file object
-  def start_write_to_file file
+  def start_write_to_file file_name
     @stop_writing_to_file = false
     @thread = Thread.new do
       while @stop_writing_to_file != true
+        file = File.new file_name, 'a'
         file << read_message.join(',') + "\n"
+        file.close
       end
-      file.close
     end
   end
   def stop_write_to_file
