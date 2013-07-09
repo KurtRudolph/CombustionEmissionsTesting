@@ -1,6 +1,7 @@
 require_relative 'micro_aeth.rb'
 
 com = MicroAeth::Com.new
+com.start
 
 f = File.new ('tmp/' + Time.now.to_s + '.micro_aeth.dat'), 'w'
 f << %w(Ref Sen ATN Flow Temp Status Battery sigma_ap).join(',') + "\n"

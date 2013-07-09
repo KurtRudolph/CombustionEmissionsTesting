@@ -122,6 +122,7 @@ module MicroAeth
         sleep 45
         Timeout::timeout(60) { wait_for_acknowledge }
         write MicroAeth::Instruction::StartWrite
+        Timeout::timeout(60) { wait_for_acknowledge }
       rescue Timeout::Error
         retry
       end 
@@ -170,6 +171,7 @@ module MicroAeth
           rescue RuntimeError
             retry
           end
+          erase_flash if m.status = 64
           atn = Math.log( m.ref.to_f / m.sen1.to_f) * 100
           file << [m.ref, m.sen1, atn, m.flow, m.pcb_temp, m.status, m.battery, sigma_ap( m, m_prev)].join(',') + "\n"
           m_prev = m
