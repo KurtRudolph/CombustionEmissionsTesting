@@ -130,7 +130,7 @@ module MicroAeth
     def clear_buffer
       begin
         while true 
-          Timeout::timeout(.5) { read_message }
+          Timeout::timeout(0.5) { read_message }
         end
       rescue Timeout::Error
         nil
