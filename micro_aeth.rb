@@ -1,4 +1,5 @@
 require 'serialport'
+require 'timeout'
 
 module MicroAeth
   class ::String
@@ -146,7 +147,6 @@ module MicroAeth
 
     def start
       begin 
-        clear_buffer
         erase_flash
       rescue EOFError
         raise "Problem stating the MicroAeth"
