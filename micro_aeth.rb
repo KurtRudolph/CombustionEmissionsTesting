@@ -109,10 +109,36 @@ module MicroAeth
     ###
     # @m The message to be written
     def write instruction
-      data = Instruction::M + instruction
+      data = MicroAeth::Instruction::M + instruction
       len = data.length.chr
       crc = data ^ len
-      @com.write (Instruction::STX + len + data + crc + Instruction::ETX).force_encoding("ASCII-8BIT")
+      @com.write (MicroAeth::Instruction::STX + len + data + crc + MicroAeth::Instruction::ETX).force_encoding("ASCII-8BIT")
+    end
+
+    def erase_flash
+      begin 
+        write MicroAeth::Instruction::EraseFlash
+        Timeout::timeout 60 { wait_for_acknowledge }
+        sleep 45
+        Timeout::timeout 60 { wait_for_acknowledge }
+        write MicroAeth::Instruction::StartWrite
+      rescue Timeout::Error
+        retry
+      end 
+    end
+
+    def wait_for_acknowledge
+      while read_message != "\u0006AE5X:A\u0014".force_encoding("ASCII-8BIT")
+        nil
+      end
+    end
+
+    def start
+      begin 
+        erase_flash
+      rescue EOFError
+        raise "Problem stating the MicroAeth"
+      end
     end
 
     ##
@@ -269,4 +295,6 @@ You should also make sure that when you send /x02 that it sends 00000010 not
   - Data(index+28)
   - Data(index+29)
   - Data(index+30) 
+
+Acknowledge: "\u0006AE5X:A\u0014" 
 =end
