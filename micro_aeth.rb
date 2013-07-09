@@ -117,6 +117,7 @@ module MicroAeth
 
     def erase_flash
       begin 
+        clear_buffer
         write MicroAeth::Instruction::EraseFlash
         Timeout::timeout(60) { wait_for_acknowledge }
         sleep 45
@@ -145,6 +146,7 @@ module MicroAeth
 
     def start
       begin 
+        clear_buffer
         erase_flash
       rescue EOFError
         raise "Problem stating the MicroAeth"
@@ -173,6 +175,7 @@ module MicroAeth
     def start_write_to_file file
       @stop_writing_to_file = false
       @thread = Thread.new do
+        clear_buffer
         m_prev = nil
         while @stop_writing_to_file != true
           begin
