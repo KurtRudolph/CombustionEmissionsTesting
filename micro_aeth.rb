@@ -127,6 +127,15 @@ module MicroAeth
         retry
       end 
     end
+    def clear_buffer
+      begin
+        while true 
+          Timeout::timeout(.5) { read_message }
+        end
+      rescue Timeout::Error
+        nil
+      end
+    end
 
     def wait_for_acknowledge
       while read_message != "\u0006AE5X:A\u0014".force_encoding("ASCII-8BIT")
