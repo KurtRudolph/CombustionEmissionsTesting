@@ -172,7 +172,7 @@ module MicroAeth
     
     ###
     # @file a ruby file object
-    def start_write_to_file file
+    def start_write_to_file file_name
       @stop_writing_to_file = false
       @thread = Thread.new do
         clear_buffer
@@ -185,10 +185,11 @@ module MicroAeth
           end
           erase_flash if m.status == 64
           atn = Math.log( m.ref.to_f / m.sen1.to_f) * 100
+          file = File.new file_name, 'a'
           file << [Time.now, m.ref, m.sen1, atn, m.flow, m.pcb_temp, m.status, m.battery, sigma_ap( m, m_prev)].join(',') + "\n"
+          file.close
           m_prev = m
         end
-        file.close
       end
     end
     def stop_write_to_file
