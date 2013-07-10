@@ -17,11 +17,13 @@ class DAQ
   end
 
   def start
+    print "The DAQ is starting!.."
     begin 
       begin 
         Timeout::timeout 60 do
           while true
-            print @com.readchar
+            @com.readchar
+            print "."
           end
         end
       rescue Timeout::Error

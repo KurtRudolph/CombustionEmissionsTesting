@@ -146,6 +146,7 @@ module MicroAeth
     end
 
     def start
+      puts "The MicroAeth is starting!.."
       begin 
         clear_buffer
       rescue [EOFError, Timeout::Error]
