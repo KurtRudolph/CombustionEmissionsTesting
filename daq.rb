@@ -71,7 +71,8 @@ class DAQ
     @thread = Thread.new do
       while @stop_writing_to_file != true
         file = File.new file_name, 'a'
-        file << read_message.join(',') + "\n"
+        message = read_message.join(',') + "\n"
+        file << message
         file.close
       end
     end
