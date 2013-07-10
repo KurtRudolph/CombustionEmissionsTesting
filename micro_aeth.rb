@@ -186,7 +186,7 @@ module MicroAeth
           erase_flash if m.status == 64
           atn = Math.log( m.ref.to_f / m.sen1.to_f) * 100
           file = File.new file_name, 'a'
-          message = [Time.now, m.ref, m.sen1, atn, m.flow, m.pcb_temp, m.status, m.battery, sigma_ap( m, m_prev)].join(',') + "\n"
+          print message = [Time.now, m.ref, m.sen1, atn, m.flow, m.pcb_temp, m.status, m.battery, sigma_ap( m, m_prev)].join(',') + "\n"
           file << message
           file.close
           m_prev = m
