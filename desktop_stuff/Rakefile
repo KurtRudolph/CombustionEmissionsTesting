@@ -1,0 +1,12 @@
+task :default => [:configure_system]
+
+desc "Places the desktop files on the Desktop one per directory"
+task :configure_system do
+  dir_ary = Dir.glob('*').select { |f| File.directory? f }
+  dir_ary.each do |dir|
+    Dir.chdir dir do
+      desktop_file = Dir.glob('*').bsearch { |f| !(/.*\.desktop/.match(f).nil?) }
+      FileUtils.cp desktop_file, "#{Dir.home}/Desktop/#{desktop_file}"
+    end
+  end
+end
