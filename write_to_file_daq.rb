@@ -10,7 +10,6 @@ f << "DateTime," + daq.column_names.join(',') + "\n"
 f.close
 daq.start_write_to_file file_name
 
-require 'pry'
 begin
   print "\nType 'exit' to stop program: "
 end while gets != "exit\n"
