@@ -1,3 +1,4 @@
+#/usr/bin/env ruby
 require_relative 'micro_aeth.rb'
 
 com = MicroAeth::Com.new
