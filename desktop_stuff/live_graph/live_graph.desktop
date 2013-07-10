@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=LiveGraph
+Comment=From http://www.live-graph.org/
+Exec=/home/pi/Library/CombustionEmissionsTesting/desktop_stuff/live_graph/launcher.sh
+Icon=/home/pi/Library/CombustionEmissionsTesting/desktop_stuff/live_graph/icon.png
+Terminal=false
+Type=Application
+Categories=Application
+StartupNotify=true

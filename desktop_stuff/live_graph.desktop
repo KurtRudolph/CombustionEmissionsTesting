@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=LiveGraph
-Comment=From http://www.live-graph.org/
-Exec=/home/pi/Library/LiveGraph.1.14.Application.bin/launcher.sh
-Icon=/home/pi/Library/LiveGraph.1.14.Application.bin/LiveGraph-SplashScreen.gif
-Terminal=false
-Type=Application
-Categories=Application
-StartupNotify=true
