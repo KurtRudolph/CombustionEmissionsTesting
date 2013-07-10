@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=MicroAeth Write To File
+Comment= no comment.
+Exec=/home/pi/Library/CombustionEmissionsTesting/desktop_stuff/micro_aeth_write_to_file/launcher.sh
+Icon=/home/pi/Library/CombustionEmissionsTesting/desktop_stuff/micro_aeth_write_to_file/icon.png
+Terminal=false
+Type=Application
+Categories=Application
+StartupNotify=true

@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=DAQ Write To File
-Comment=From http://inventwithpython.com/pygame/
-Exec=/home/pi/Desktop/WriteToFileDAQ.sh
-Icon=/usr/share/pixmaps/python.xpm
-Terminal=true
-Type=Application
-Categories=Application
-StartupNotify=true
