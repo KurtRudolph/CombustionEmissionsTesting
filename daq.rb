@@ -21,7 +21,7 @@ class DAQ
       begin 
         Timeout::timeout 60 do
           while true
-            puts @com.readchar
+            print @com.readchar
           end
         end
       rescue Timeout::Error
