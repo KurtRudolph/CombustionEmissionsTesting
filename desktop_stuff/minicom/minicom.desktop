@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Minicom
+Comment= no comment.
+Exec=/home/pi/Library/CombustionEmissionsTesting/desktop_stuff/minicom/launcher.sh
+Icon=/home/pi/Library/CombustionEmissionsTesting/desktop_stuff/minicom/icon.png
+Terminal=true
+Type=Application
+Categories=Application
+StartupNotify=true
