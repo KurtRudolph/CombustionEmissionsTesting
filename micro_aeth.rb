@@ -148,8 +148,6 @@ module MicroAeth
     def start
       begin 
         clear_buffer
-        write MicroAeth::Instruction::StartWrite
-        Timeout::timeout(60) { wait_for_acknowledge }
       rescue [EOFError, Timeout::Error]
         raise "Problem stating the MicroAeth"
       end
