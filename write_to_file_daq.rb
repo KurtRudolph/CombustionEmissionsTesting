@@ -6,7 +6,7 @@ daq.start
 
 file_name = '/home/pi/Desktop/LiveGraphData/' + Time.now.to_s + '.daq.dat'
 f = File.new file_name, 'w'
-f << daq.column_names.join(',') + "\n"
+f << "DateTime," + daq.column_names.join(',') + "\n"
 f.close
 daq.start_write_to_file file_name
 
